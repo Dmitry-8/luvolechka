@@ -1,0 +1,93 @@
+function next(n){
+ blurTransition(()=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  let page=document.getElementById('p'+n);
+  page.classList.add('active');
+  startTyping(page);
+  if(n==3) hearts();
+  if(n==4) planes();
+ });
+}
+
+startTyping(document.getElementById('p1'));
+
+function hearts(){
+ let count=0;
+ let interval=setInterval(()=>{
+  for(let i=0;i<5;i++) createHeart();
+  count++;
+  if(count>=3) clearInterval(interval);
+ },1000);
+}
+
+function createHeart(){
+ let h=document.createElement('div');
+ h.innerHTML='❤️';
+ h.style.position='absolute';
+ h.style.left=(Math.random()>0.5?0:window.innerWidth)+'px';
+ h.style.top='0px';
+ h.style.fontSize=(16+Math.random()*20)+'px';
+ document.body.appendChild(h);
+ let vx=Math.random()*4-2;
+ let vy=2;
+ let g=0.15;
+ let rotate=Math.random()*360;
+ let fall=setInterval(()=>{
+  vy+=g;
+  h.style.top=(h.offsetTop+vy)+'px';
+  h.style.left=(h.offsetLeft+vx)+'px';
+  rotate+=3;
+  h.style.transform=rotate(${rotate}deg) scale(${1+Math.sin(rotate/20)*0.2});
+  if(h.offsetTop>window.innerHeight){clearInterval(fall);h.remove();}
+ },30);
+}
+
+function planes(){
+ for(let i=0;i<20;i++){
+  setTimeout(()=>{
+   let h=document.createElement('div');
+   h.innerHTML='✈️';
+   h.style.position='absolute';
+   h.style.left=Math.random()*100+'%';
+   h.style.top='-20px';
+   document.body.appendChild(h);
+   let fall=setInterval(()=>{
+    h.style.top=(h.offsetTop+5)+'px';
+    if(h.offsetTop>window.innerHeight){clearInterval(fall);h.remove();}
+   },30);
+  },i*150);
+ }
+}
+
+function endScene(){
+ document.body.innerHTML='';
+ document.body.style.background='black';
+ let text=document.createElement('h1');
+ text.innerText='Конец!';
+ text.style.color='#ff69b4';
+ text.style.marginTop='40vh';
+ document.body.appendChild(text);
+ let total=0;
+ let fill=setInterval(()=>{
+  for(let i=0;i<20;i++){
+   let h=document.createElement('div');
+   h.innerHTML='❤️';
+   h.style.position='absolute';
+   h.style.left=Math.random()*100+'%';
+   h.style.top='-20px';
+   h.style.fontSize=(20+Math.random()*20)+'px';
+   document.body.appendChild(h);
+   let fall=setInterval(()=>{h.style.top=(h.offsetTop+6)+'px';},20);
+  }
+  total+=20;
+  if(total>300){
+   text.remove();
+   clearInterval(fill);
+   setTimeout(()=>{document.body.innerHTML='';document.body.style.background='black';},2000);
+  }
+ },200);
+}
+</script>
+
+</body>
+</html>
